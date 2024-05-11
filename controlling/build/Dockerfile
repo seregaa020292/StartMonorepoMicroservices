@@ -40,6 +40,8 @@ ENV CGO_ENABLED=0 \
 RUN --mount=type=cache,target=${GOMODCACHE} \
     --mount=type=cache,target=${GOCACHE} \
     --mount=type=bind,target=. \
+    --mount=type=bind,from=common_source,target=/app/common \
+    --mount=type=bind,from=common_source,target=/app/common \
     go build -ldflags="-X './cmd/api/main.Version=${VERSION}'" -o /bin/app ./cmd/api
 
 #-------------------------------------------------------------------------------
