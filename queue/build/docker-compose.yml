@@ -1,0 +1,51 @@
+services:
+  queue-kafka-ui:
+    image: provectuslabs/kafka-ui:${KAFKA_UI_VERSION:-latest}
+    volumes:
+      - type: bind
+        source: ../kafkaui/config.yml
+        target: /etc/kafkaui/dynamic_config.yaml
+    ports:
+      - "${KAFKA_UI_PORT:-8080}:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: queue-kafka:9092
+    depends_on:
+      - queue-kafka
+
+  queue-kafka:
+    image: confluentinc/cp-kafka:${KAFKA_VERSION:-latest}
+    volumes:
+      - type: volume
+        source: queue-kafka_volume
+        target: /var/lib/kafka
+    ports:
+      - "${KAFKA_PORT:-9092}:9092"
+      - "9997:9997"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: queue-zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://queue-kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_JMX_PORT: 9997
+      KAFKA_JMX_HOSTNAME: queue-kafka
+    restart: on-failure
+    depends_on:
+      - queue-zookeeper
+
+  queue-zookeeper:
+    image: confluentinc/cp-zookeeper:${ZOOKEEPER_VERSION:-latest}
+    volumes:
+      - type: volume
+        source: queue-zookeeper_volume
+        target: /var/lib/zookeeper
+    ports:
+      - "${ZOOKEEPER_PORT:-2181}:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    restart: on-failure
+
+volumes:
+  queue-kafka_volume:
+  queue-zookeeper_volume:

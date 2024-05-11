@@ -1,0 +1,43 @@
+services:
+  controlling-api:
+    build:
+      context: ../
+      dockerfile: ./build/Dockerfile
+      target: ${ENV:-development}
+      additional_contexts:
+        common_source: ../../common
+    volumes:
+      - type: bind
+        source: ../../common
+        target: /app/common
+        read_only: true
+      - type: bind
+        source: ../
+        target: /app/src
+    ports:
+      - "${API_PORT:-8080}:8080"
+    environment:
+      PG_DB: ${PG_DB}
+      PG_USER: ${PG_USER}
+      PG_PASSWORD: ${PG_PASSWORD}
+      PG_HOST: ${PG_HOST}
+      PG_PORT: 5432
+      MONITORING_ADDR: ${MONITORING_ADDR}
+    depends_on:
+      - controlling-pg
+
+  controlling-pg:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    ports:
+      - "${PG_PORT:-54321}:5432"
+    volumes:
+      - type: volume
+        source: controlling-pg_volume
+        target: /var/lib/postgresql/data
+
+volumes:
+  controlling-pg_volume:
