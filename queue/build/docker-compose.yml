@@ -21,7 +21,7 @@ services:
         target: /var/lib/kafka
     ports:
       - "${KAFKA_PORT:-9092}:9092"
-      - "9997:9997"
+      - "${KAFKA_JMX_PORT:-9997}:9997"
     environment:
       KAFKA_ZOOKEEPER_CONNECT: queue-zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://queue-kafka:9092

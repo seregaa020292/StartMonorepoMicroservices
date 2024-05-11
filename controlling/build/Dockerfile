@@ -50,7 +50,7 @@ RUN --mount=type=cache,target=${GOMODCACHE} \
 FROM base AS development
 ARG AIR_VERSION=1.52.0
 RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b ${GOPATH}/bin v${AIR_VERSION}
-ENTRYPOINT ["air"]
+CMD ["sh", "-c", "air -c .air.toml"]
 
 #-------------------------------------------------------------------------------
 # STAGE: PRODUCTION
