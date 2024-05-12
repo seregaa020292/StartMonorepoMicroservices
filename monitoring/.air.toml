@@ -1,6 +1,5 @@
-root = "../"
-testdata_dir = "./src/testdata"
-tmp_dir = "./src/tmp/air"
+root = "."
+tmp_dir = "./tmp/air"
 
 [build]
   args_bin = []
@@ -13,7 +12,7 @@ tmp_dir = "./src/tmp/air"
   exclude_unchanged = false
   follow_symlink = false
   full_bin = ""
-  include_dir = ["./src/cmd", "./src/internal", "./common/pkg"]
+  include_dir = ["cmd", "internal", "pkg"]
   include_ext = ["go", "tpl", "tmpl", "html"]
   include_file = []
   kill_delay = "0s"
@@ -40,6 +39,11 @@ tmp_dir = "./src/tmp/air"
 
 [misc]
   clean_on_exit = false
+
+[proxy]
+  app_port = 0
+  enabled = false
+  proxy_port = 0
 
 [screen]
   clear_on_rebuild = false

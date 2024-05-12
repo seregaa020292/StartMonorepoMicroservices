@@ -7,6 +7,9 @@ ARG ALPINE_VERSION=3.19
 # STAGE: BASE
 #-------------------------------------------------------------------------------
 FROM golang:${GO_VERSION}-alpine AS base
+ARG TARGET_CGO_ENABLED=0
+ARG TARGET_OS=linux
+ARG TARGET_ARCH=amd64
 WORKDIR /app/src
 RUN apk add --no-cache tzdata curl
 RUN --mount=type=cache,target=${GOMODCACHE} \
@@ -33,27 +36,35 @@ COPY --from=test /tmp/result.txt /
 # STAGE: BUILD
 #-------------------------------------------------------------------------------
 FROM base AS build
-ARG VERSION="v0.0.0+unknown"
-ENV CGO_ENABLED=0 \
-    GOOS=linux \
-    GOARCH=amd64
+ENV CGO_ENABLED=$TARGET_CGO_ENABLED \
+    GOOS=$TARGET_OS \
+    GOARCH=$TARGET_ARCH
 RUN --mount=type=cache,target=${GOMODCACHE} \
     --mount=type=cache,target=${GOCACHE} \
     --mount=type=bind,target=. \
     --mount=type=bind,from=common_source,target=/app/common \
     --mount=type=bind,from=common_source,target=/app/common \
-    go build -ldflags="-X './cmd/api/main.Version=${VERSION}'" -o /bin/app ./cmd/api
+    go build -o /bin/app ./cmd/api
 
 #-------------------------------------------------------------------------------
-# STAGE: DEVELOPMENT
+# STAGE: DEVELOPMENT FROM ENV
 #-------------------------------------------------------------------------------
 FROM base AS development
 ARG AIR_VERSION=1.52.0
-RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b ${GOPATH}/bin v${AIR_VERSION}
-CMD ["sh", "-c", "air -c .air.toml"]
+RUN --mount=type=cache,target=${GOMODCACHE} \
+    go install github.com/cosmtrek/air@v${AIR_VERSION}
+ENV CGO_ENABLED=$TARGET_CGO_ENABLED \
+    GOOS=$TARGET_OS \
+    GOARCH=$TARGET_ARCH
+CMD ["air", "-c", ".air.toml", \
+    "-root", "/app", \
+    "-tmp_dir", "./src/tmp/air", \
+    "-build.include_dir", "src/cmd,src/internal,common/pkg", \
+    "-build.cmd", "go build -o ./bin/app ./cmd/api/main.go" \
+]
 
 #-------------------------------------------------------------------------------
-# STAGE: PRODUCTION
+# STAGE: PRODUCTION FROM ENV
 #-------------------------------------------------------------------------------
 FROM alpine:${ALPINE_VERSION} AS production
 COPY --from=build /bin/app /bin/app

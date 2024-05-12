@@ -11,7 +11,10 @@ down:
 restart: down up
 
 build:
-	docker compose build
+	docker compose build $(CMD_ARGS)
+
+rebuild:
+	docker compose up -d --no-deps --build $(CMD_ARGS)
 
 workspace-use:
 	go work use $(CMD_ARGS)
