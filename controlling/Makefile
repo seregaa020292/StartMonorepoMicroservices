@@ -4,7 +4,9 @@
 
 COMPOSE_FILE:=./build/docker-compose.yml
 
-CMD_ARGS?=$(filter-out $@, $(MAKECMDGOALS))
+CMD_ARGS?=$(filter-out $@, $(MAKECMDGOALS)) $(MAKEFLAGS)
+%:
+	@true
 
 up:
 	docker compose -f $(COMPOSE_FILE) up -d

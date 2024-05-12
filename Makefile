@@ -1,6 +1,9 @@
 .PHONY: build
 
-CMD_ARGS?=$(filter-out $@, $(MAKECMDGOALS))
+# https://stackoverflow.com/a/6273809/1334666
+CMD_ARGS?=$(filter-out $@, $(MAKECMDGOALS)) $(MAKEFLAGS)
+%:
+	@true
 
 up:
 	docker compose up -d
