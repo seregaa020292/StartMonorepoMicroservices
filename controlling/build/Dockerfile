@@ -59,8 +59,7 @@ ENV CGO_ENABLED=$TARGET_CGO_ENABLED \
 CMD ["air", "-c", ".air.toml", \
     "-root", "/app", \
     "-tmp_dir", "./src/tmp/air", \
-    "-build.include_dir", "src/cmd,src/internal,common/pkg", \
-    "-build.cmd", "go build -o ./bin/app ./cmd/api/main.go" \
+    "-build.include_dir", "src/cmd,src/internal,common/pkg" \
 ]
 
 #-------------------------------------------------------------------------------

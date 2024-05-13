@@ -1,5 +1,5 @@
-root = "."
-tmp_dir = "./tmp/air"
+root = "../"
+tmp_dir = "./monitoring/tmp/air"
 
 [build]
   args_bin = []
@@ -12,7 +12,7 @@ tmp_dir = "./tmp/air"
   exclude_unchanged = false
   follow_symlink = false
   full_bin = ""
-  include_dir = ["cmd", "internal", "pkg"]
+  include_dir = ["monitoring/cmd", "monitoring/internal", "common/pkg"]
   include_ext = ["go", "tpl", "tmpl", "html"]
   include_file = []
   kill_delay = "0s"
