@@ -1,7 +1,7 @@
 include:
   - path: ./controlling/build/docker-compose.yml
   - path: ./monitoring/build/docker-compose.yml
-#  - path: ./queue/build/docker-compose.yml
+  - path: ./queue/build/docker-compose.yml
 
 networks:
   default:

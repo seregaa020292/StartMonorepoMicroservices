@@ -14,7 +14,7 @@ down:
 restart: down up
 
 build:
-	docker compose build $(CMD_ARGS)
+	docker compose build --pull $(CMD_ARGS)
 
 rebuild:
 	docker compose up -d --no-deps --build $(CMD_ARGS)
