@@ -67,4 +67,6 @@ CMD ["air", "-c", ".air.toml", \
 #-------------------------------------------------------------------------------
 FROM alpine:${ALPINE_VERSION} AS production
 COPY --from=build /bin/app /bin/app
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD wget -qO- http://localhost:8080/health || exit 1
 ENTRYPOINT ["/bin/app"]

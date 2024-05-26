@@ -22,6 +22,7 @@ services:
       PG_PASSWORD: ${PG_PASSWORD}
       PG_HOST: ${PG_HOST}
       PG_PORT: 5432
+    restart: on-failure
     depends_on:
       - monitoring-pg
 

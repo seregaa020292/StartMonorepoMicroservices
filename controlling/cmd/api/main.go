@@ -18,6 +18,9 @@ func main() {
 	mux.HandleFunc("GET /{$}", func(w http.ResponseWriter, r *http.Request) {
 		w.Write(hi.Message())
 	})
+	mux.HandleFunc("GET /health/{$}", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("OK"))
+	})
 	mux.HandleFunc("GET /ping/{$}", func(w http.ResponseWriter, r *http.Request) {
 		resp, err := http.Get(fmt.Sprintf("%s/ping", os.Getenv("MONITORING_ADDR")))
 		if err != nil {
