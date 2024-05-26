@@ -11,7 +11,9 @@ ARG TARGET_CGO_ENABLED=0
 ARG TARGET_OS=linux
 ARG TARGET_ARCH=amd64
 WORKDIR /app/src
-RUN apk add --no-cache tzdata curl
+RUN --mount=type=cache,target=/var/cache/apk \
+    apk --update add ca-certificates tzdata curl \
+    && update-ca-certificates
 RUN --mount=type=cache,target=${GOMODCACHE} \
     --mount=type=bind,source=go.mod,target=go.mod \
     --mount=type=bind,source=go.sum,target=go.sum \
