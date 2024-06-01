@@ -4,7 +4,7 @@ tmp_dir = "./controlling/tmp/air"
 [build]
   args_bin = []
   bin = "./bin/app"
-  cmd = "go build -o ./bin/app ./cmd/api/main.go"
+  cmd = "go build -o ./bin/app ./cmd/app"
   delay = 1000
   exclude_dir = []
   exclude_file = []

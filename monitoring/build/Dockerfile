@@ -46,7 +46,7 @@ RUN --mount=type=cache,target=${GOMODCACHE} \
     --mount=type=bind,target=. \
     --mount=type=bind,from=common_source,target=/app/common \
     --mount=type=bind,from=common_source,target=/app/common \
-    go build -o /bin/app ./cmd/api
+    go build -o /bin/app ./cmd/app
 
 #-------------------------------------------------------------------------------
 # STAGE: DEVELOPMENT FROM ENV
