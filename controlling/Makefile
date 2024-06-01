@@ -2,7 +2,7 @@
 
 -include build/.env
 
-COMPOSE_FILE:=./build/docker-compose.yml
+COMPOSE_FILE:=./build/compose.yml
 
 CMD_ARGS?=$(filter-out $@, $(MAKECMDGOALS)) $(MAKEFLAGS)
 %:

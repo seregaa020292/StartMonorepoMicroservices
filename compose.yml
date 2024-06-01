@@ -1,0 +1,9 @@
+include:
+  - path: ./controlling/build/compose.yml
+  - path: ./monitoring/build/compose.yml
+  - path: ./queue/build/compose.yml
+
+networks:
+  default:
+    name: fine
+    driver: bridge

@@ -18,7 +18,7 @@ services:
     volumes:
       - type: volume
         source: queue-kafka_volume
-        target: /kafka
+        target: /var/lib/kafka
     ports:
       - "${KAFKA_PORT:-9092}:9092"
       - "${KAFKA_JMX_PORT:-9997}:9997"
@@ -38,7 +38,7 @@ services:
     volumes:
       - type: volume
         source: queue-zookeeper_volume
-        target: /zookeeper
+        target: /var/lib/zookeeper
     ports:
       - "${ZOOKEEPER_PORT:-2181}:2181"
     environment:
